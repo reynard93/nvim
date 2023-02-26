@@ -54,6 +54,58 @@ local get_os = function()
   return vim.loop.os_uname().sysname
 end
 
+local create_or_source_obsession = function()
+  local async_job_ok, job = pcall(require, "plenary.job")
+  local is_git = u.file_exists(".git")
+  if not is_git then
+    return
+  end
+
+  local has_obsession = vim.fn.exists(":Obsession")
+  if has_obsession == 0 then
+    require("notify")("Obsesssion is not installed", "warn")
+    return
+  end
+
+  if not async_job_ok then
+    require("notify")("Plenary is not yet installed", "warn")
+    return
+  end
+
+  local args = vim.v.argv
+  if #args ~= 1 then
+    return nil
+  end
+  local branch = u.get_branch_name()
+  if not branch then
+    branch = "init_branch_session"
+  else
+    branch = branch:gsub("%W", "")
+  end
+  if vim.fn.isdirectory(".sessions") == 1 then
+    -- TODO: Check for sessions directory at root
+    local session_path = ".sessions/session." .. branch .. ".vim"
+    if u.file_exists(session_path) then
+      vim.cmd(string.format("silent source %s", session_path))
+      vim.cmd(string.format("silent Obsession %s", session_path))
+    else
+      vim.cmd(string.format("silent Obsession %s", session_path))
+    end
+  else
+    require("notify")("Creating sessions directory...", "warn")
+    job
+      :new({
+        command = "mkdir",
+        args = { vim.fn.getcwd() .. "/" .. ".sessions" },
+        on_exit = function(_, exit_code)
+          if exit_code ~= 0 then
+            require("notify")("Could not make sessions directory", "error")
+          end
+        end,
+      })
+      :start()
+  end
+end
 return {
   get_os = get_os,
   get_home = function()
@@ -320,4 +372,5 @@ return {
   move_line_up = function()
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("dd<Up>P", false, true, true), "n", false)
   end,
+  create_or_source_obsession = create_or_source_obsession,
 }

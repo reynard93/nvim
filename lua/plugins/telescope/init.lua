@@ -86,7 +86,7 @@ return {
     local function CheckoutAndRestore(prompt_bufnr)
       vim.cmd.Obsession()
       actions.git_checkout(prompt_bufnr)
-      f.create_or_source_obsession()
+      u.create_or_source_obsession()
     end
 
     local function CompareWithCurrentBranchInDiffview(prompt_bufnr)
