@@ -221,12 +221,12 @@ return {
     })
 
     vim.keymap.set("n", "<C-c>", current_buffer_fuzzy_find, {})
-    vim.keymap.set("n", "<leader>E", telescope.extensions.file_browser.file_browser, { silent = true, noremap = true })
+    -- vim.keymap.set("n", "<leader>E", telescope.extensions.file_browser.file_browser, { silent = true, noremap = true })
     vim.keymap.set("n", "<leader>tgc", git_commits, {})
     vim.keymap.set("n", "<leader>tgb", git_branches, {})
     vim.keymap.set("n", "<leader>tsg", grep_string, {})
     vim.keymap.set("v", "<leader>tsg", grep_string_visual, {})
-    vim.keymap.set("n", "<leader>e", OpenFileInFileBrowser)
+    -- vim.keymap.set("n", "<leader>e", OpenFileInFileBrowser)
 
     -- telescope.load_extension("fzf")
     telescope.load_extension("file_browser")
