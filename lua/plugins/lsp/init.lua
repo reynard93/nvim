@@ -6,6 +6,7 @@
 local lua_ls = require("plugins.lsp.servers.lua_ls")
 local volar = require("plugins.lsp.servers.volar")
 local eslint = require("plugins.lsp.servers.eslint")
+local denols = require("plugins.lsp.servers.denols")
 
 return {
   -- lspconfig
@@ -58,7 +59,9 @@ return {
         lua_ls = lua_ls,
         volar =  volar,
         eslint = eslint,
-        html = {}
+        html = {},
+        denols = denols,
+        quick_lint_js = {}
         -- jsonls = jsonls,
         -- tsserver = tsserver,
       },
@@ -71,8 +74,6 @@ return {
           require("typescript").setup({ server = opts })
           return true
         end,
-        -- Specify * to use this function as a fallback for any server
-        ["*"] = function(server, opts) end,
       },
     },
     ---@param opts PluginLspOpts
@@ -114,13 +115,6 @@ return {
       -- keys[#keys + 1] = { "]w", false }
       -- keys[#keys + 1] = { "[w", false }
 
-      -- diagnostics
-      for name, icon in pairs(require("lazyvim.config").icons.diagnostics) do
-        name = "DiagnosticSign" .. name
-        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-      end
-      vim.diagnostic.config(opts.diagnostics)
-
       local servers = opts.servers
       local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -155,16 +149,7 @@ return {
     "jose-elias-alvarez/null-ls.nvim",
     event = "BufReadPre",
     dependencies = { "mason.nvim" },
-    opts = function()
-      local nls = require("null-ls")
-      return {
-        sources = {
-          nls.builtins.formatting.prettierd,
-          nls.builtins.formatting.stylua,
-          -- nls.builtins.diagnostics.flake8,
-        },
-      }
-    end,
+    config = require("plugins.lsp.null-ls-settings").init()
   },
 
   -- cmdline tools and lsp servers
