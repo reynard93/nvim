@@ -32,7 +32,7 @@ return {
         severity_sort = true,
       },
       -- Automatically format on save
-      autoformat = false,
+      autoformat = true,
       -- options for vim.lsp.buf.format
       -- `bufnr` and `filter` is handled by the LazyVim formatter,
       -- but can be also overriden when specified
@@ -57,11 +57,11 @@ return {
           },
         },
         lua_ls = lua_ls,
-        volar =  volar,
+        volar = volar,
         eslint = eslint,
         html = {},
         denols = denols,
-        quick_lint_js = {}
+        quick_lint_js = {},
         -- jsonls = jsonls,
         -- tsserver = tsserver,
       },
@@ -149,38 +149,9 @@ return {
     "jose-elias-alvarez/null-ls.nvim",
     event = "BufReadPre",
     dependencies = { "mason.nvim" },
-    config = require("plugins.lsp.null-ls-settings").init()
+    config = require("plugins.lsp.null-ls-settings").init(),
   },
-
   -- cmdline tools and lsp servers
-  {
-
-    "williamboman/mason.nvim",
-    cmd = "Mason",
-    keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
-    opts = {
-      ensure_installed = {
-        "stylua",
-        "shellcheck",
-        "shfmt",
-        "flake8",
-      },
-    },
-    ---@param opts MasonSettings | {ensure_installed: string[]}
-    config = function(plugin, opts)
-      if plugin.ensure_installed then
-        require("lazyvim.util").deprecate("treesitter.ensure_installed", "treesitter.opts.ensure_installed")
-      end
-      require("mason").setup(opts)
-      local mr = require("mason-registry")
-      for _, tool in ipairs(opts.ensure_installed) do
-        local p = mr.get_package(tool)
-        if not p:is_installed() then
-          p:install()
-        end
-      end
-    end,
-  },
   {
     "glepnir/lspsaga.nvim",
     event = "VeryLazy",
@@ -258,6 +229,7 @@ return {
       keymap("n", "[E", function()
         require("lspsaga.diagnostic"):goto_prev({ severity = vim.diagnostic.severity.ERROR })
       end)
+
       keymap("n", "]E", function()
         require("lspsaga.diagnostic"):goto_next({ severity = vim.diagnostic.severity.ERROR })
       end)
