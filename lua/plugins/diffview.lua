@@ -2,7 +2,6 @@ return {
   "sindrets/diffview.nvim",
   requires = "nvim-lua/plenary.nvim",
   config = function()
-
     local actions = require("diffview.actions")
     local u = require("utils.func")
     local diffview = require("diffview")
@@ -21,9 +20,9 @@ return {
         vim.api.nvim_feedkeys(":DiffviewFileHistory " .. vim.fn.expand("%"), "n", false)
         u.press_enter()
       end
-    end)
+    end, { desc = "Git File History" })
 
-    vim.keymap.set("n", "<leader>gh", function()
+    vim.keymap.set("n", "<leader>gfa", function()
       local isDiff = vim.fn.getwinvar(nil, "&diff")
       local bufName = vim.api.nvim_buf_get_name(0)
       if isDiff ~= 0 or u.string_starts(bufName, "diff") then
@@ -32,38 +31,25 @@ return {
       else
         vim.cmd.DiffviewFileHistory()
       end
-    end)
-
-    -- Toggle viewing all current changes
-    vim.keymap.set("n", "<leader>gc", function()
-      local isDiff = vim.fn.getwinvar(nil, "&diff")
-      local bufName = vim.api.nvim_buf_get_name(0)
-      if isDiff ~= 0 or u.string_starts(bufName, "diff") then
-        vim.cmd("tabclose")
-        vim.cmd("tabprev")
-      else
-        vim.cmd.DiffviewOpen()
-        u.press_enter()
-      end
-    end)
+    end, { desc = "Git File History(ALL)" })
 
     -- Review changes against develop (will break if no develop branch present)
-    vim.keymap.set("n", "<leader>gR", function()
-      local isDiff = vim.fn.getwinvar(nil, "&diff")
-      local bufName = vim.api.nvim_buf_get_name(0)
-      local has_develop = u.branch_exists("main") -- TODO: Write this function
-      if not has_develop then
-        require("notify")('No main branch, cannot review!', "error")
-        return
-      end
-      if isDiff ~= 0 or u.string_starts(bufName, "diff") then
-        vim.cmd.tabclose()
-        vim.cmd.tabprev()
-      else
-        vim.cmd.DiffviewOpen("main")
-        u.press_enter()
-      end
-    end)
+    -- vim.keymap.set("n", "<leader>gR", function()
+    --   local isDiff = vim.fn.getwinvar(nil, "&diff")
+    --   local bufName = vim.api.nvim_buf_get_name(0)
+    --   local has_develop = u.branch_exists("main") -- TODO: Write this function
+    --   if not has_develop then
+    --     require("notify")("No main branch, cannot review!", "error")
+    --     return
+    --   end
+    --   if isDiff ~= 0 or u.string_starts(bufName, "diff") then
+    --     vim.cmd.tabclose()
+    --     vim.cmd.tabprev()
+    --   else
+    --     vim.cmd.DiffviewOpen("main")
+    --     u.press_enter()
+    --   end
+    -- end)
 
     vim.keymap.set("n", "<leader>go", function()
       local isDiff = vim.fn.getwinvar(nil, "&diff")
@@ -74,7 +60,7 @@ return {
       else
         vim.cmd.DiffviewOpen()
       end
-    end)
+    end, { desc = "Git diff Open" })
 
     diffview.setup({
       diff_binaries = false,
@@ -164,5 +150,5 @@ return {
         option_panel = { ["<tab>"] = cb("select"), ["q"] = cb("close") },
       },
     })
-  end
+  end,
 }

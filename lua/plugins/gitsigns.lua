@@ -70,6 +70,6 @@ return {
     -- vim.keymap.set("n", "<leader>gd", gitsigns.preview_hunk)
     vim.keymap.set("n", "<leader>gq", function()
       gitsigns.setqflist("all")
-    end)
+    end, { desc = "Git quickfix all" })
   end,
 }
