@@ -62,14 +62,14 @@ return {
     })
 
     -- Gitsigns w/ hunks and blames.
-    vim.keymap.set("n", "<leader>ga", gitsigns.stage_hunk)
-    vim.keymap.set("n", "<leader>gb", gitsigns.blame_line)
-    vim.keymap.set("n", "<leader>gp", gitsigns.prev_hunk)
-    vim.keymap.set("n", "<leader>gn", gitsigns.next_hunk)
-    vim.keymap.set("n", "<leader>gr", gitsigns.reset_hunk)
-    vim.keymap.set("n", "<leader>gd", gitsigns.preview_hunk)
+    vim.keymap.set("n", "<leader>ga", gitsigns.stage_hunk, { desc = "Stage hunk" })
+    vim.keymap.set("n", "<leader>gb", gitsigns.blame_line, { desc = "Blame line " })
+    vim.keymap.set("n", "<leader>gp", gitsigns.prev_hunk, { desc = "Previous hunk" })
+    vim.keymap.set("n", "<leader>gn", gitsigns.next_hunk, { desc = "Next hunk" })
+    vim.keymap.set("n", "<leader>gr", gitsigns.reset_hunk, { desc = "Reset hunk" })
+    -- vim.keymap.set("n", "<leader>gd", gitsigns.preview_hunk)
     vim.keymap.set("n", "<leader>gq", function()
       gitsigns.setqflist("all")
     end)
-  end
+  end,
 }

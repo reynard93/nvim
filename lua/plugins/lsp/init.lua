@@ -62,8 +62,7 @@ return {
         html = {},
         denols = denols,
         quick_lint_js = {},
-        -- jsonls = jsonls,
-        -- tsserver = tsserver,
+        cssls = {},
       },
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
