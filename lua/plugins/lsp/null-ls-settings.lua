@@ -9,10 +9,16 @@ function M.init()
   if not null_ls_utils_status_ok then
     return
   end
-  local mason_null_ls_status_ok, mason_null_ls = pcall(require, "mason-null-ls")
-  if not mason_null_ls_status_ok then
-    return
-  end
+  -- local mason_null_ls_status_ok, mason_null_ls = pcall(require, "mason-null-ls")
+  -- if not mason_null_ls_status_ok then
+  --   return
+  -- end
+  --
+  -- mason_null_ls.setup({
+  --   ensure_installed = nil,
+  --   automatic_installation = true,
+  --   automatic_setup = false,
+  -- })
 
   local formatting = null_ls.builtins.formatting
   local diagnostics = null_ls.builtins.diagnostics
@@ -86,7 +92,7 @@ function M.init()
       return is_prettier_project_result
     end
 
-    if utils.root_has_file({ ".prettierrc" }) then
+    if utils.root_has_file({ ".prettierrc" }) or utils.root_has_file({ "prettier.config.js" }) then
       is_prettier_project_result = true
       return is_prettier_project_result
     end
@@ -108,14 +114,25 @@ function M.init()
     end
     return true
   end
+  local create_format_on_save_autocmd = function(augroup_name, bufnr, timeout_ms)
+    timeout_ms = timeout_ms or 1000
+
+    local group = vim.api.nvim_create_augroup(augroup_name .. "FormatOnSave", { clear = false })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format({ timeout_ms = timeout_ms })
+      end,
+      group = group,
+    })
+  end
 
   null_ls.setup({
     diagnostics_format = "[#{c}] #{m} (#{s})",
     debug = true,
     on_attach = function(_, bufnr)
-      local utils = require("daneharnett.utils")
       -- Set the timeout to 10s as it kept timing out for me.
-      utils.create_format_on_save_autocmd("NullLs", bufnr, 10000)
+      create_format_on_save_autocmd("NullLs", bufnr, 10000)
     end,
     sources = {
       -- diagnostic sources
@@ -143,12 +160,6 @@ function M.init()
       }),
       formatting.stylua,
     },
-  })
-
-  mason_null_ls.setup({
-    ensure_installed = nil,
-    automatic_installation = true,
-    automatic_setup = false,
   })
 end
 

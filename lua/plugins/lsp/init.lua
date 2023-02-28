@@ -14,8 +14,8 @@ return {
     "neovim/nvim-lspconfig",
     event = "BufReadPre",
     dependencies = {
-      { "folke/neoconf.nvim", cmd = "Neoconf", config = true },
-      { "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
+      { "folke/neoconf.nvim", cmd = "Neoconf",                                config = true },
+      { "folke/neodev.nvim",  opts = { experimental = { pathStrict = true } } },
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "hrsh7th/cmp-nvim-lsp",
@@ -147,8 +147,10 @@ return {
   {
     "jose-elias-alvarez/null-ls.nvim",
     event = "BufReadPre",
-    dependencies = { "mason.nvim" },
-    config = require("plugins.lsp.null-ls-settings").init(),
+    -- dependencies = { "mason.nvim" },
+    config = function()
+      require("plugins.lsp.null-ls-settings").init()
+    end,
   },
   -- cmdline tools and lsp servers
   {

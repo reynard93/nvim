@@ -1,3 +1,6 @@
+if true then
+  return {}
+end
 return {
   "nvim-neotest/neotest",
   dependencies = {
@@ -17,8 +20,7 @@ return {
     vim.diagnostic.config({
       virtual_text = {
         format = function(diagnostic)
-          local message =
-          diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
+          local message = diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
           return message
         end,
       },
@@ -31,7 +33,7 @@ return {
       status = {
         enabled = true,
         signs = true, -- Sign after function signature
-        virtual_text = false
+        virtual_text = false,
       },
       icons = {
         child_indent = "│",
@@ -46,16 +48,16 @@ return {
         running = "",
         running_animated = { "/", "|", "\\", "-", "/", "|", "\\", "-" },
         skipped = "↓",
-        unknown = ""
+        unknown = "",
       },
       floating = {
         border = "rounded",
         max_height = 0.9,
         max_width = 0.9,
-        options = {}
+        options = {},
       },
       summary = {
-        open = "botright vsplit | vertical resize 60"
+        open = "botright vsplit | vertical resize 60",
       },
       highlights = {
         adapter_name = "NeotestAdapterName",
@@ -74,70 +76,44 @@ return {
         skipped = "NeotestSkipped",
         target = "NeotestTarget",
         test = "NeotestTest",
-        unknown = "NeotestUnknown"
+        unknown = "NeotestUnknown",
       },
       adapters = {
-        require('neotest-vitest'),
-        require('neotest-go')
-      }
+        require("neotest-vitest"),
+        require("neotest-go"),
+      },
     })
 
-    vim.api.nvim_set_hl(0, 'NeotestBorder', { fg = colors.fujiGray })
-    vim.api.nvim_set_hl(0, 'NeotestIndent', { fg = colors.fujiGray })
-    vim.api.nvim_set_hl(0, 'NeotestExpandMarker', { fg = colors.fujiGray })
-    vim.api.nvim_set_hl(0, 'NeotestDir', { fg = colors.fujiGray })
-    vim.api.nvim_set_hl(0, 'NeotestFile', { fg = colors.fujiGray })
-    vim.api.nvim_set_hl(0, 'NeotestFailed', { fg = colors.samuraiRed })
-    vim.api.nvim_set_hl(0, 'NeotestPassed', { fg = colors.springGreen })
-    vim.api.nvim_set_hl(0, 'NeotestSkipped', { fg = colors.fujiGray })
-    vim.api.nvim_set_hl(0, 'NeotestRunning', { fg = colors.carpYellow })
-    vim.api.nvim_set_hl(0, 'NeotestNamespace', { fg = colors.crystalBlue })
-    vim.api.nvim_set_hl(0, 'NeotestAdapterName', { fg = colors.oniViolet })
+    vim.api.nvim_set_hl(0, "NeotestBorder", { fg = colors.fujiGray })
+    vim.api.nvim_set_hl(0, "NeotestIndent", { fg = colors.fujiGray })
+    vim.api.nvim_set_hl(0, "NeotestExpandMarker", { fg = colors.fujiGray })
+    vim.api.nvim_set_hl(0, "NeotestDir", { fg = colors.fujiGray })
+    vim.api.nvim_set_hl(0, "NeotestFile", { fg = colors.fujiGray })
+    vim.api.nvim_set_hl(0, "NeotestFailed", { fg = colors.samuraiRed })
+    vim.api.nvim_set_hl(0, "NeotestPassed", { fg = colors.springGreen })
+    vim.api.nvim_set_hl(0, "NeotestSkipped", { fg = colors.fujiGray })
+    vim.api.nvim_set_hl(0, "NeotestRunning", { fg = colors.carpYellow })
+    vim.api.nvim_set_hl(0, "NeotestNamespace", { fg = colors.crystalBlue })
+    vim.api.nvim_set_hl(0, "NeotestAdapterName", { fg = colors.oniViolet })
 
-    vim.keymap.set(
-      "n",
-      "<localleader>tfr",
-      function()
-        neotest.run.run(vim.fn.expand("%"))
-        neotest.summary.open()
-      end,
-      map_opts
-    )
+    vim.keymap.set("n", "<localleader>tfr", function()
+      neotest.run.run(vim.fn.expand("%"))
+      neotest.summary.open()
+    end, map_opts)
 
-    vim.keymap.set(
-      "n",
-      "<localleader>tr",
-      function()
-        neotest.run.run()
-        neotest.summary.open()
-      end,
-      map_opts
-    )
+    vim.keymap.set("n", "<localleader>tr", function()
+      neotest.run.run()
+      neotest.summary.open()
+    end, map_opts)
 
-    vim.keymap.set(
-      "n",
-      "<localleader>to",
-      neotest.output.open
-    )
+    vim.keymap.set("n", "<localleader>to", neotest.output.open)
 
+    vim.keymap.set("n", "<localleader>tt", function()
+      neotest.summary.toggle()
+    end, map_opts)
 
-    vim.keymap.set(
-      "n",
-      "<localleader>tt",
-      function()
-        neotest.summary.toggle()
-      end,
-      map_opts
-    )
-
-    vim.keymap.set(
-      "n",
-      "<localleader>tc",
-      function()
-        neotest.summary.close()
-      end,
-      map_opts
-    )
-
-  end
+    vim.keymap.set("n", "<localleader>tc", function()
+      neotest.summary.close()
+    end, map_opts)
+  end,
 }

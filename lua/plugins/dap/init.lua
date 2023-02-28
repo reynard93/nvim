@@ -1,3 +1,8 @@
+-- temp disable dap plugins
+if true then
+  return {}
+end
+
 return {
   "rcarriga/nvim-dap-ui",
   dependencies = {
@@ -25,7 +30,7 @@ return {
     -- special adapter, seen in /lua/plugins/dap/adapters.lua
     mason_dap.setup({
       ensure_installed = { "delve", "node2", "js" },
-      automatic_installation = true
+      automatic_installation = true,
     })
 
     -- ╭──────────────────────────────────────────────────────────╮
@@ -45,11 +50,10 @@ return {
     -- that you are trying to debug (the debugee).
     configurations.setup(dap)
 
-
     -- ╭──────────────────────────────────────────────────────────╮
     -- │ Keybindings + UI                                         │
     -- ╰──────────────────────────────────────────────────────────╯
-    vim.fn.sign_define('DapBreakpoint', { text = '🐞' })
+    vim.fn.sign_define("DapBreakpoint", { text = "🐞" })
 
     local function dap_start_debugging()
       dap.continue({})
@@ -76,11 +80,9 @@ return {
     -- TODO: How to get current adapter config? Could restart with current arguments
     local function dap_restart_current_session()
       dap.terminate()
-      vim.defer_fn(
-        function()
-          dap.continue()
-        end,
-        300)
+      vim.defer_fn(function()
+        dap.continue()
+      end, 300)
     end
 
     vim.keymap.set("n", "<localleader>dr", dap_restart_current_session)
@@ -114,12 +116,12 @@ return {
             "scopes",
           },
           size = 0.3,
-          position = "right"
+          position = "right",
         },
         {
           elements = {
             "repl",
-            "breakpoints"
+            "breakpoints",
           },
           size = 0.3,
           position = "bottom",
@@ -138,5 +140,5 @@ return {
         max_type_length = nil,
       },
     })
-  end
+  end,
 }
